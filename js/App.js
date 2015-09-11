@@ -16,13 +16,14 @@ App.prototype = (function() { var pro = {};
 
   //  Contants
   var ANIM_DELAY  = 300,
-      KEY_SPACE   = 13,
-      KEY_S       = 179,
-      KEY_D       = 68,
-      KEY_1       = 40,
-      KEY_2       = 37,
-      KEY_3       = 38,
-      KEY_4       = 39,
+      KEY_SELECT   = 13,
+      KEY_RR   = 227,
+      KEY_PP       = 179,
+      KEY_FF       = 228,
+      KEY_DOWN     = 40,
+      KEY_LEFT     = 37,
+      KEY_UP       = 38,
+      KEY_RIGHT    = 39,
       PATTERNS    = [
         [{deg: 0, top: 0}],
         [{deg: 5, top: 0}, {deg: -5, top: 0}],
@@ -106,17 +107,18 @@ App.prototype = (function() { var pro = {};
   var onKeyDown = function ( e )
   {
       switch ( e.keyCode ) {
-        case KEY_SPACE :
+        case KEY_RR :
+        case KEY_SELECT :
           ( isPlaying )
             ? actionsNav.children('li:first-child').children('a').addClass('active')
             : dealNav.children('a').addClass('active');
         break;
-        case KEY_S : actionsNav.children('li:nth-child(2)').children('a').addClass('active'); break;
-        case KEY_D : actionsNav.children('li:nth-child(3)').children('a').addClass('active'); break;
-        case KEY_1 : selectChip(0); break;
-        case KEY_2 : selectChip(1); break;
-        case KEY_3 : selectChip(2); break;
-        case KEY_4 : selectChip(1); break;
+        case KEY_PP : actionsNav.children('li:nth-child(2)').children('a').addClass('active'); break;
+        case KEY_FF : actionsNav.children('li:nth-child(3)').children('a').addClass('active'); break;
+        case KEY_DOWN : selectChip(0); break;
+        case KEY_RIGHT :
+        case KEY_LEFT : selectChip(1); break;
+        case KEY_UP : selectChip(2); break;
       }
   };
 
@@ -125,7 +127,8 @@ App.prototype = (function() { var pro = {};
       e.preventDefault();
 
       switch ( e.keyCode ) {
-        case KEY_SPACE :
+        case KEY_RR :
+        case KEY_SELECT :
           if ( isPlaying ) {
             hit();
             actionsNav.children('li:first-child').children('a').removeClass('active')
@@ -133,18 +136,18 @@ App.prototype = (function() { var pro = {};
             deal();
             dealNav.children('a').removeClass('active');
           }
-        case KEY_S :
+        case KEY_PP :
           stand();
           actionsNav.children('li:nth-child(2)').children('a').removeClass('active');
         break;
-        case KEY_D :
+        case KEY_FF :
           doubledown();
           actionsNav.children('li:nth-child(3)').children('a').removeClass('active');
         break;
-        case KEY_1 : selectChip(0); break;
-        case KEY_2 : selectChip(1); break;
-        case KEY_3 : selectChip(2); break;
-        case KEY_4 : selectChip(1); break;
+        case KEY_DOWN : selectChip(0); break;
+        case KEY_RIGHT :
+        case KEY_LEFT : selectChip(1); break;
+        case KEY_UP : selectChip(2); break;
       }
   };
 
