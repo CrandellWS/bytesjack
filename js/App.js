@@ -16,12 +16,13 @@ App.prototype = (function() { var pro = {};
 
   //  Contants
   var ANIM_DELAY  = 300,
-      KEY_SPACE   = 32,
-      KEY_S       = 83,
+      KEY_SPACE   = 13,
+      KEY_S       = 179,
       KEY_D       = 68,
-      KEY_1       = 49,
-      KEY_2       = 50,
-      KEY_3       = 51,
+      KEY_1       = 40,
+      KEY_2       = 37,
+      KEY_3       = 38,
+      KEY_4       = 39,
       PATTERNS    = [
         [{deg: 0, top: 0}],
         [{deg: 5, top: 0}, {deg: -5, top: 0}],
@@ -31,7 +32,7 @@ App.prototype = (function() { var pro = {};
         [{deg: 14, top: 40}, {deg: 8, top: 10}, {deg: -2, top: 5}, {deg: -5, top: 15}, {deg: -8, top: 40}, {deg: -14, top: 70}],
         [{deg: 14, top: 70}, {deg: 8, top: 30}, {deg: 4, top: 10}, {deg: 0, top: 5}, {deg: -4, top: 20}, {deg: -8, top: 40}, {deg: -16, top: 70}]
       ];
-      
+
   //  Variables
   var types           = ['clubs', 'diamonds', 'hearts', 'spades'],
       cards           = [],
@@ -60,14 +61,14 @@ App.prototype = (function() { var pro = {};
       isStanding      = false,
       gameEnded       = false,
       html            = $('html');
-      
+
   //  public
   pro.initialize = function(opts) { initialize() };
   pro.deal       = function() { deal() };
   pro.hit        = function() { hit() };
   pro.stand      = function() { stand() };
   pro.doubledown = function() { doubledown() };
-  
+
   //  private
   var initialize = function()
   {
@@ -75,19 +76,19 @@ App.prototype = (function() { var pro = {};
       initBet();
       initResize();
       initKeyboardKeys();
-      
+
       setTimeout(function(){
         window.scrollTo(0, 1)
       }, 500);
   }
-  
+
   //  Resize management
   var initResize = function()
   {
       $(window).bind('resize', onWindowResize);
       onWindowResize(null);
   };
-  
+
   var onWindowResize = function ( e )
   {
       clearTimeout(resizeTimer);
@@ -95,13 +96,13 @@ App.prototype = (function() { var pro = {};
         centerContainers();
       }, 100);
   };
-  
+
   //  Keyboard managment
   var initKeyboardKeys = function() {
       $(document).bind('keydown', onKeyDown);
       $(document).bind('keyup', onKeyUp);
   };
-  
+
   var onKeyDown = function ( e )
   {
       switch ( e.keyCode ) {
@@ -115,18 +116,19 @@ App.prototype = (function() { var pro = {};
         case KEY_1 : selectChip(0); break;
         case KEY_2 : selectChip(1); break;
         case KEY_3 : selectChip(2); break;
+        case KEY_4 : selectChip(1); break;
       }
   };
-  
+
   var onKeyUp = function ( e )
   {
       e.preventDefault();
-      
+
       switch ( e.keyCode ) {
         case KEY_SPACE :
           if ( isPlaying ) {
             hit();
-            actionsNav.children('li:first-child').children('a').removeClass('active') 
+            actionsNav.children('li:first-child').children('a').removeClass('active')
           } else {
             deal();
             dealNav.children('a').removeClass('active');
@@ -142,15 +144,16 @@ App.prototype = (function() { var pro = {};
         case KEY_1 : selectChip(0); break;
         case KEY_2 : selectChip(1); break;
         case KEY_3 : selectChip(2); break;
+        case KEY_4 : selectChip(1); break;
       }
   };
-  
+
   var selectChip = function ( index )
   {
       if ( isPlaying || gameEnded ) return;
       allChips.eq(index).trigger('click');
   };
-  
+
   //  Cards management
   var initDeck = function()
   {
@@ -160,7 +163,7 @@ App.prototype = (function() { var pro = {};
           cards.push({ card:j, value: value, type: types[i] });
         };
       }
-    
+
       cards.shuffle();
   };
 
@@ -170,49 +173,49 @@ App.prototype = (function() { var pro = {};
           container = ( player == 'player' ) ? pCardsContainer : dCardsContainer,
           card      = buildCard(cardsIndex, cardData.type, cardData.card, side),
           zIndex    = 0;
-    
+
       cardsIndex++;
       canDoAction = false;
-      
+
       card.css({
         'top'   : '-150%',
         'left'  : '100%'
-      });  
-    
+      });
+
       container.append(card);
       zIndex = ( player == 'player' ) ? card.index() : 50-card.index();
       card.css('z-index', zIndex);
-      
+
       setTimeout(function(){
         card.css({
           'top'     : '0%',
           'left'    : 10 * card.index() + '%'
         });
         rotateCards(container, (player == 'player'));
-        
-        
+
+
         setTimeout(function(){
           centerContainer(container);
           if ( player == 'player' ) addToPlayerTotal(cardData.value);
           else                      addToDealerTotal(cardData.value);
-          
+
           canDoAction = true;
           if ( callback != undefined ) callback.call();
         }, ANIM_DELAY + 100);
       }, 10);
   };
-  
+
   var rotateCards = function ( container, isPlayer )
   {
       var cards     = container.children('.card'),
           numCards  = cards.size() - 1,
           increment = ( isPlayer ) ? -1 : 1,
           pattern   = ( PATTERNS[numCards] ) ? PATTERNS[numCards] : PATTERNS[PATTERNS.length-1];
-      
+
       cards.each(function(i){
         var deg     = ( i < pattern.length ) ? pattern[i].deg : pattern[pattern.length-1].deg,
             offset  = ( i < pattern.length ) ? pattern[i].top : pattern[pattern.length-1].top + (20 * (i - pattern.length + 1));
-        
+
         $(this).css({
           '-webkit-transform' : 'rotate('+ deg * increment +'deg)',
           '-khtml-transform' : 'rotate('+ deg * increment +'deg)',
@@ -223,27 +226,27 @@ App.prototype = (function() { var pro = {};
         });
       });
   };
-  
+
   var centerContainers = function()
   {
       centerContainer(pCardsContainer);
       centerContainer(dCardsContainer);
   };
-  
+
   var centerContainer = function ( container )
   {
       var lastCard    = container.children('.card:last-child'),
           totalWidth  = 0;
-      
+
       if ( lastCard.size() == 0 ) return;
-      
+
       totalWidth = lastCard.position().left + lastCard.width();
       if ( html.attr('browser') == 'Safari' )
         container.css('-webkit-transform', 'translate3d('+ -totalWidth / 2 +'px,0,0)');
       else
         container.css('margin-left', -totalWidth / 2 + 'px');
   };
-  
+
   var buildCard = function (id, type, value, side)
   {
       var card;
@@ -253,16 +256,16 @@ App.prototype = (function() { var pro = {};
             cardIcon  = ( type == 'hearts' ) ? '♥' : ( type == 'diamonds' ) ? '♦' : ( type == 'spades' ) ? '♠' : '♣',
             corner    = '<div><span>'+cardValue+'</span><span>'+cardIcon+'</span></div>',
             icons     = '';
-        
+
         if ( value <= 10 ) {
           for ( var i=1, l=value; i <= l; i++ ) {
             icons += '<span>'+cardIcon+'</span>';
           }
         } else icons = ( value == 11 ) ? '<span>♝</span>' : ( value == 12 ) ? '<span>♛</span>' : ( value == 13 ) ? '<span>♚</span>' : '';
-      
+
         card =  $('<div data-id="'+id+'" class="card value'+cardValue+' '+type+'">'+corner+'<div class="icons">'+icons+'</div>'+corner+'</div>');
       }
-    
+
       return card;
   };
 
@@ -270,9 +273,9 @@ App.prototype = (function() { var pro = {};
   var deal = function()
   {
       if ( isPlaying || !canDoAction || gameEnded ) return;
-      
+
       isPlaying = true;
-    
+
       if ( gameDealed ) {
         doubleBtn.removeClass('desactivate');
         playerTotal.html('');
@@ -288,11 +291,11 @@ App.prototype = (function() { var pro = {};
         isStanding  = false;
         $('#message').remove();
       }
-    
+
       pCardsContainer.html('');
       dCardsContainer.html('');
       initDeck();
-    
+
       changeBankroll(-1);
       ditributeCards();
       gameDealed = true;
@@ -301,7 +304,7 @@ App.prototype = (function() { var pro = {};
   var hit = function()
   {
       if ( !isPlaying || !canDoAction || isStanding || gameEnded ) return;
-      
+
       doubleBtn.addClass('desactivate');
       addCard('front', 'player', function(){
         if ( playerCards.sum() > 21 ) lose('lose-busted');
@@ -311,10 +314,10 @@ App.prototype = (function() { var pro = {};
   var stand = function()
   {
       if ( !isPlaying || !canDoAction || isStanding || gameEnded ) return;
-      
+
       isStanding = true;
       revealDealerCard();
-      
+
       setTimeout(function(){
         if ( dealerCards.sum() < 17 ) dealerTurn();
         else end();
@@ -365,18 +368,18 @@ App.prototype = (function() { var pro = {};
       changeBankroll(0);
       stopGame();
   };
-  
+
   var showMessage = function ( status )
   {
       var msg       = document.createElement('div'),
           content   = '',
           message   = $('#message');
-          
+
       if ( message.size() > 0 ) message.remove();
-          
+
       msg.className = status;
       msg.id        = 'message';
-          
+
       switch ( status ) {
         case 'win': content = 'You win'; break;
         case 'win-blackjack': content = 'You win<span>Blackjack</span>'; break;
@@ -388,7 +391,7 @@ App.prototype = (function() { var pro = {};
         case 'game-over': content = 'Game over'; break;
         default: content = '<span>Something broke, don’t know what happened...</span>'; break;
       }
-      
+
       msg.innerHTML = content;
       pCardsContainer.after(msg);
   };
@@ -403,15 +406,15 @@ App.prototype = (function() { var pro = {};
       else if ( pScore > dScore ) win('win');
       else if ( pScore == dScore ) push('push');
   };
-  
+
   var endGame = function()
   {
       showMessage('game-over');
       gameEnded = true;
-      
+
       var overlay = document.createElement('div');
       overlay.id = 'overlay';
-      
+
       $('body').append(overlay);
   };
 
@@ -421,12 +424,12 @@ App.prototype = (function() { var pro = {};
       dealNav.show();
       actionsNav.hide();
       chips.removeClass('disabled');
-      
+
       allChips.each(function(i){
         var chip = $(this);
         if ( chip.data('value') > bank ) {
           chip.addClass('desactivate');
-          
+
           var chipsAvailable = allChips.removeClass('bet').not('.desactivate');
           if ( chipsAvailable.size() == 0 ) endGame();
           else {
@@ -435,7 +438,7 @@ App.prototype = (function() { var pro = {};
             changeBet(newChip.data('value'));
             chips.prepend(newChip);
           }
-           
+
         } else if ( chip.hasClass('desactivate') ) chip.removeClass('desactivate');
       });
   };
@@ -443,7 +446,7 @@ App.prototype = (function() { var pro = {};
   var ditributeCards = function()
   {
       canDoAction = false;
-      
+
       addCard('front', 'player', function(){
         addCard('front', 'dealer', function(){
           addCard('front', 'player', function(){
@@ -453,7 +456,7 @@ App.prototype = (function() { var pro = {};
           });
         });
       });
-      
+
       dealNav.hide();
       actionsNav.show();
       chips.addClass('disabled');
@@ -463,7 +466,7 @@ App.prototype = (function() { var pro = {};
   {
       var pScore  = playerCards.sum(),
           dScore  = dealerCards.sum();
-      
+
       if ( pScore == 21 && dScore == 21 ) push('Push - No winner');
       else if ( pScore == 21 ) win('win-blackjack');
       else if ( dScore == 21 ) {
@@ -504,12 +507,12 @@ App.prototype = (function() { var pro = {};
           id      = card.data('id'),
           data    = cards[id],
           newCard = buildCard(id, data.type, data.value, 'front');
-      
+
       newCard.css({
         'left' : 10 * card.index() + '%',
         'z-index' : 50-card.index()
       });
-      
+
       card.after(newCard).remove();
       dealerTotal.html(calculateDealerScore());
   };
@@ -543,11 +546,11 @@ App.prototype = (function() { var pro = {};
       allChips.bind('click', function(e){
         var chip = $(this);
         if ( isPlaying || chip.hasClass('desactivate') ) return;
-        
+
         allChips.removeClass('bet');
         chip.addClass('bet');
         changeBet(chip.data('value'));
-        
+
         chips.prepend(chip);
       });
   };
@@ -564,14 +567,14 @@ App.prototype = (function() { var pro = {};
 
 return pro })();
 
-/* 
+/*
  * Array shuffle <http://snipplr.com/view/535>
  * Array sum <http://snipplr.com/view/533>
 */
 Array.prototype.shuffle = function() { for(var j, x, i = this.length; i; j = Math.floor(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x); }
 Array.prototype.sum = function() { for(var s = 0, i = this.length; i; s += this[--i]); return s; };
 
-/* 
+/*
  * Browser Detect <http://teev.io/blog/text/13423292>
 */
 var BrowserDetect = {
@@ -584,7 +587,7 @@ var BrowserDetect = {
 
         var b = document.documentElement;
         b.setAttribute('browser',  this.browser);
-        b.setAttribute('version', this.version );		
+        b.setAttribute('version', this.version );
         b.setAttribute('os', this.OS);
     },
     searchString: function (data) {
