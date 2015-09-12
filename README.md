@@ -2,6 +2,7 @@ BytesJack — An HTML Blackjack game
 ==================================
 BytesJack is an HTML / JS powered Blackjack game initially developped for the [10k Apart contest](http://10k.aneventapart.com/).
 
+This fork is focused on Amazon FireTV devices.
 
 Features
 --------
