@@ -6,7 +6,7 @@
  *
  *  Special thanks to rafBM <http://twitter.com/#!/rafbm> for some JS tricks!
  */
-
+alert('need to test what changes, cause no docs on this was found.');
 // Static class hack (auto init)
 $(document).ready(function(){ window.App = new App() });
 
