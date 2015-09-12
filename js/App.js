@@ -115,7 +115,7 @@ App.prototype = (function() { var pro = {};
         break;
         case KEY_PP :
           ( isPlaying )
-            ? actionsNav.children('li:nth-child(2)').children('a').addClass('active');
+            ? actionsNav.children('li:nth-child(2)').children('a').addClass('active')
             : dealNav.children('a').addClass('active');
             break;
         case KEY_FF : actionsNav.children('li:nth-child(3)').children('a').addClass('active'); break;
