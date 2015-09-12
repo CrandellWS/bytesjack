@@ -472,7 +472,7 @@ body, html {
     -o-box-shadow: 0 0 0 3px #0277f4, 0 -1px 0 3px #0265f1, 0 1px 0 3px #008dff, inset 0 1px 1px #0784ff, inset 0 -1px 0px #0261f1;
     box-shadow: 0 0 0 3px #0277f4, 0 -1px 0 3px #0265f1, 0 1px 0 3px #008dff, inset 0 1px 1px #0784ff, inset 0 -1px 0px #0261f1; }
   .chip.blue::before {
-    content: '2'; }
+    content: 'left/right'; }
 
 .chip.red {
   background-color: #f54800;
@@ -493,7 +493,7 @@ body, html {
     -o-box-shadow: 0 0 0 3px #eb4503, 0 -1px 0 3px #de3400, 0 1px 0 3px #ff5100, inset 0 1px 1px #fd5410, inset 0 -1px 0px #de3400;
     box-shadow: 0 0 0 3px #eb4503, 0 -1px 0 3px #de3400, 0 1px 0 3px #ff5100, inset 0 1px 1px #fd5410, inset 0 -1px 0px #de3400; }
   .chip.red::before {
-    content: '1'; }
+    content: 'down'; }
 
 .chip.yellow {
   background-color: #f3cf00;
@@ -514,7 +514,7 @@ body, html {
     -o-box-shadow: 0 0 0 3px #eec900, 0 -1px 0 3px #ceaf00, 0 1px 0 3px #e9dc00, inset 0 1px 1px #e9dc00, inset 0 -1px 0px #ceaf00;
     box-shadow: 0 0 0 3px #eec900, 0 -1px 0 3px #ceaf00, 0 1px 0 3px #e9dc00, inset 0 1px 1px #e9dc00, inset 0 -1px 0px #ceaf00; }
   .chip.yellow::before {
-    content: '3'; }
+    content: 'up'; }
 
 .card {
   font-size: 1.5em;
