@@ -113,7 +113,11 @@ App.prototype = (function() { var pro = {};
             ? actionsNav.children('li:first-child').children('a').addClass('active')
             : dealNav.children('a').addClass('active');
         break;
-        case KEY_PP : actionsNav.children('li:nth-child(2)').children('a').addClass('active'); break;
+        case KEY_PP :
+          ( isPlaying )
+            ? actionsNav.children('li:nth-child(2)').children('a').addClass('active');
+            : dealNav.children('a').addClass('active');
+            break;
         case KEY_FF : actionsNav.children('li:nth-child(3)').children('a').addClass('active'); break;
         case KEY_DOWN : selectChip(0); break;
         case KEY_RIGHT :
@@ -137,9 +141,14 @@ App.prototype = (function() { var pro = {};
             dealNav.children('a').removeClass('active');
           }
         case KEY_PP :
-          stand();
-          actionsNav.children('li:nth-child(2)').children('a').removeClass('active');
-        break;
+          if ( isPlaying ) {
+            stand();
+            actionsNav.children('li:nth-child(2)').children('a').removeClass('active');
+            break;
+          } else {
+            deal();
+            dealNav.children('a').removeClass('active');
+          }
         case KEY_FF :
           doubledown();
           actionsNav.children('li:nth-child(3)').children('a').removeClass('active');
